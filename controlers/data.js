@@ -19,9 +19,6 @@ if (tagline){
     querys.tagline = {$regex:li.join('|'),$options:"i"};
 }
 
-
-
-// const myData = await data.distinct('tagline');
     const myData = await data.find(querys).limit(100).select('-_id -poster_path -__v');//.sort('title');
     res.status(200).json(myData);
 }

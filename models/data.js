@@ -1,15 +1,5 @@
 const mongoose = require("mongoose");
 
-
-// Title:{
-//     type:String,
-//     required:true
-// },
-
-// Gross_Earnings:{
-//     type:Number,
-//     required:true
-// }
 const schema = new mongoose.Schema(
     {
         adult: {
