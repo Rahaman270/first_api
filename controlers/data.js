@@ -1,27 +1,45 @@
-const data = require("../models/data")
+const data = require("../models/data");
 
-const getData = async (req,res) =>{
+const getData = async (req, res) => {
+  const querys = {};
+  const all = [
+    "imdb_title_id",
+    "title",
+    // "original_title",
+    "year",
+    "date_published",
+    "genre",
+    "duration",
+    "country",
+    "language",
+    "director",
+    "writer",
+    "production_company",
+    "actors",
+    "description",
+    "avg_vote",
+    "votes",
+    "budget",
+    "usa_gross_income",
+    "worlwide_gross_income",
+    "metascore",
+    "reviews_from_users",
+    "reviews_from_critics",
+  ];
 
-const {title,overview,tagline} = req.query
-const querys = {};
+  all.forEach((e) => {
+    if (req.query[e] !== undefined) {
+      const par = req.query[e];
+      var li = par.split(",").map((e) => e);
+      querys[e] = { $regex: li.join("|"), $options: "i" };
+    }
+  });
 
-if (title){
-    querys.title = {$regex:title,$options:"i"};
-}
+  const myData = await data
+    .find(querys)
+    .limit(100)
+    .select("-_id -original_title -__v"); //.sort('title');
+  res.status(200).json(myData);
+};
 
-if (overview){
-    var li = overview.split(',').map((e)=>e);
-    querys.overview = {$regex:li.join('|'),$options:"i"};
-}
-
-if (tagline){
-    var li = tagline.split(',').map((e)=>e);
-    querys.tagline = {$regex:li.join('|'),$options:"i"};
-}
-
-    const myData = await data.find(querys).limit(100).select('-_id -poster_path -__v');//.sort('title');
-    res.status(200).json(myData);
-}
-
-
-module.exports = {getData}
+module.exports = { getData };

@@ -6,8 +6,11 @@ const port = process.env.PORT || 2000;
 
 const data = require('./routes/data')
 
+const cors = require("cors");
+app.use(cors());
 
-app.use("/",data)
+
+app.use("/api",data)
 
 const start = async()=>{
     try {
